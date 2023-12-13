@@ -1,6 +1,6 @@
 Práctica Axentes Intelixentes
 
-Diego Pereiro MArtinez Sayanes
+Diego Pereiro Martinez Sayanes
 
 
 
