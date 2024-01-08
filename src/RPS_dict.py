@@ -27,7 +27,7 @@ class EstrategiaRandom:
     def __init__(self):
         pass
     
-    def get_computer_action(user_action):
+    def get_computer_action(self,user_action):
         computer_selection = random.randint(0, len(GameAction) - 1)
         computer_action = GameAction(computer_selection)
         print(f"Computer picked {computer_action.name}.")    
@@ -93,7 +93,9 @@ def get_user_action():
     game_choices_str = ", ".join(game_choices)
     user_selection = int(input(f"\nPick a choice ({game_choices_str}): "))
     user_action = GameAction(user_selection)
-
+    
+    
+    
     return user_action
 
 
@@ -104,22 +106,50 @@ def play_another_round():
 
 def main():
     strategy=EstrategiaRandom()
-    #strategy=EstrategiaPrincipal()
-    while True:
+    strategy1=EstrategiaPrincipal()
+    dificulty_selection = int(input(f"\Pick a mode Easy(1) or Hard(2)"))
+    number_games = int(input(f"How many game do you want to play?"))
+    games_played = 0
+    
+    while number_games > games_played:
+        
         try:
             user_action = get_user_action()
         except ValueError:
             range_str = f"[0, {len(GameAction) - 1}]"
             print(f"Invalid selection. Pick a choice in range {range_str}!")
             continue
-
-        computer_action = strategy.get_computer_action()
         
-        assess_game(user_action, computer_action)
-
-        if not play_another_round():
-            break
+        
+          
+        if dificulty_selection==1:  
+            computer_action = strategy.get_computer_action(user_action)
+        
+            assess_game(user_action, computer_action)
+        else:    
+            computer_action = strategy1.get_computer_action(user_action)
+    
+            assess_game(user_action, computer_action)
+        
+        games_played+=1    
+        
+        if games_played==number_games:
+            
+            if play_another_round():
+                number_games+=1
+                
+            
 
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+"""Ej 1: Escribir una función para preguntarle al usuario si quiere jugar en fácil o díficil. Si elige fácil que sea strategy random y si no que sea estrategia principal
+Ej 2: Escribir una función para preguntarle al usuario cuantas rondas quiere jugar y hacer que el bucle del juego se ejecute tantas veces y no infinito
+
+"""
