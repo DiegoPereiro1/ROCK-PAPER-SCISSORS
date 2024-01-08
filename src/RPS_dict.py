@@ -37,9 +37,18 @@ class EstrategiaRandom:
     
 class EstrategiaPrincipal:
     def __init__(self):
-        pass
-    def get_computer_action(user_action):
-        return None
+        self.history=[]
+        
+    def get_computer_action(self,user_action):
+        computer_action=None
+        
+        if len(self.history)==0:
+            computer_selection = random.randint(0, len(GameAction) - 1)
+            computer_action = GameAction(computer_selection)
+        
+        self.history.append([user_action,computer_action])
+        print(f"Computer picked {computer_action.name}.") 
+        return computer_action 
 
 def assess_game(user_action, computer_action):
 
