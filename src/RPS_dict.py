@@ -42,10 +42,35 @@ class EstrategiaPrincipal:
     def get_computer_action(self,user_action):
         computer_action=None
         
-        if len(self.history)==0:
+        if len(self.history)==0:#Comportamiento en la primera ronda
             computer_selection = random.randint(0, len(GameAction) - 1)
             computer_action = GameAction(computer_selection)
         
+       
+        elif assess_game(self.history[-1][0],self.history[-1][1])==GameAction.Defeat:#Cuando la máquina pierde en la ultima ronda
+            past_user_action=self.history[-1][0]
+            if len(self.history)>=2 and assess_game(self.history[-2][0],self.history[-2][1])==GameAction.Defeat:#Esto si ha perdido dos veces seguidas
+                lista_posibilidades=[GameAction.Rock,GameAction.Scissors,GameAction.Paper]
+                past_computer_action=self.history[-1][1]
+                past_past_computer_action=self.history[-2][1]
+                if past_computer_action in lista_posibilidades:
+                    lista_posibilidades.remove(past_computer_action)
+                if past_past_computer_action in lista_posibilidades:
+                    lista_posibilidades.remove(past_computer_action)
+                computer_selection = random.randint(0, len(GameAction) - 1)
+                computer_action = GameAction(computer_selection)        
+            else:    
+                if past_user_action==GameAction.Scissors:
+                    return GameAction.Rock
+                elif past_user_action==GameAction.Rock:
+                    return GameAction.Paper
+                else: 
+                    return GameAction.Rock
+            
+        
+        elif assess_game(self.history[-1][0],self.history[-1][1])==GameAction.Victory:
+            
+            
         self.history.append([user_action,computer_action])
         print(f"Computer picked {computer_action.name}.") 
         return computer_action 
