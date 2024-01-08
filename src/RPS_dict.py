@@ -103,11 +103,20 @@ def play_another_round():
     another_round = input("\nAnother round? (y/n): ")
     return another_round.lower() == 'y'
 
+def get_strategy():
+    strategy=EstrategiaRandom() #Esta sería la estrategia por defecto
+    
+    dificulty_selection = int(input(f"\Pick a mode Easy(1) or Hard(2)"))
+    
+    if dificulty_selection==1:
+        strategy=EstrategiaRandom()
+    elif dificulty_selection==2:
+        strategy=EstrategiaPrincipal()
+    return strategy
+
 
 def main():
-    strategy=EstrategiaRandom()
-    strategy1=EstrategiaPrincipal()
-    dificulty_selection = int(input(f"\Pick a mode Easy(1) or Hard(2)"))
+    strategy= get_strategy()   
     number_games = int(input(f"How many game do you want to play?"))
     games_played = 0
     
@@ -120,16 +129,8 @@ def main():
             print(f"Invalid selection. Pick a choice in range {range_str}!")
             continue
         
-        
-          
-        if dificulty_selection==1:  
-            computer_action = strategy.get_computer_action(user_action)
-        
-            assess_game(user_action, computer_action)
-        else:    
-            computer_action = strategy1.get_computer_action(user_action)
-    
-            assess_game(user_action, computer_action)
+        computer_action = strategy.get_computer_action(user_action)       
+        assess_game(user_action, computer_action)
         
         games_played+=1    
         
@@ -138,18 +139,6 @@ def main():
             if play_another_round():
                 number_games+=1
                 
-            
-
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-"""Ej 1: Escribir una función para preguntarle al usuario si quiere jugar en fácil o díficil. Si elige fácil que sea strategy random y si no que sea estrategia principal
-Ej 2: Escribir una función para preguntarle al usuario cuantas rondas quiere jugar y hacer que el bucle del juego se ejecute tantas veces y no infinito
-
-"""
