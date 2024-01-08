@@ -21,6 +21,26 @@ Victories = {
     GameAction.Scissors: GameAction.Rock
 }
 
+
+
+class EstrategiaRandom:
+    def __init__(self):
+        pass
+    
+    def get_computer_action(user_action):
+        computer_selection = random.randint(0, len(GameAction) - 1)
+        computer_action = GameAction(computer_selection)
+        print(f"Computer picked {computer_action.name}.")    
+        return computer_action
+    
+    
+    
+class EstrategiaPrincipal:
+    def __init__(self):
+        pass
+    def get_computer_action(user_action):
+        return None
+
 def assess_game(user_action, computer_action):
 
     game_result = None
@@ -83,7 +103,8 @@ def play_another_round():
 
 
 def main():
-
+    strategy=EstrategiaRandom()
+    #strategy=EstrategiaPrincipal()
     while True:
         try:
             user_action = get_user_action()
@@ -92,7 +113,8 @@ def main():
             print(f"Invalid selection. Pick a choice in range {range_str}!")
             continue
 
-        computer_action = get_computer_action()
+        computer_action = strategy.get_computer_action()
+        
         assess_game(user_action, computer_action)
 
         if not play_another_round():
