@@ -60,7 +60,7 @@ class EstrategiaPrincipal:
                     
                 computer_selection = random.randint(0, len(lista_posibilidades) - 1)
                 computer_action = GameAction(computer_selection)        
-            else:    
+            else:#Cuando solo ha perdido una vez    
                 if past_user_action==GameAction.Scissors:
                     computer_action=GameAction.Rock
                 elif past_user_action==GameAction.Rock:
@@ -75,7 +75,15 @@ class EstrategiaPrincipal:
             else: # Esto es si solo ha ganado una vez
                 past_computer_action=self.history[-1][1]
                 computer_action = past_computer_action
-                
+        
+        elif assess_game(self.history[-1][0],self.history[-1][1])==GameResult.Tie: # Esto es si ha empatado la ultima ronda
+            lista_posibilidades=[GameAction.Rock,GameAction.Scissors,GameAction.Paper]
+            past_computer_action=self.history[-1][1]
+            if past_computer_action in lista_posibilidades:
+                lista_posibilidades.remove(past_computer_action)#Se elimina el lo que se ha utilizado en el último turno
+            computer_selection = random.randint(0, len(lista_posibilidades) - 1)
+            computer_action = GameAction(computer_selection) 
+                            
         self.history.append([user_action,computer_action])
         print(f"Computer picked {computer_action.name}.") 
         return computer_action 
