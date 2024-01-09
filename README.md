@@ -1,41 +1,43 @@
-<<<<<<< HEAD
 # ROCK-PAPER-SCISSORS
 Practice 1 // AI and Big Data course-IES de Teis
 
-# Características del Agente
-Partially Observable / Multi Agent / Stochastic / Episodic / Static / Discrete 
+Diego Pereiro Martinez Sayanes
+
+# Estrategia del Agente
+Se guardan los movimientos tanto del usuario como de la máquina en una lista.
+
+Primer movimiento tiene que ser random
+
+En el caso de que pierda el programa. El programa sacara lo que gane  al resultado con el que ha perdido:
+
+Rondas posibles:
+Papel>Piedra --->Programa sacara en la siguiente ronda Tijeras
+Piedra>Tijeras -->Programa sacara en la siguiente ronda Papel
+Tijeras>Papel --> Programa sacara en la siguiente ronda Piedra
+
+En caso de perder dos o más veces seguidas. El programa deberá sacar el resultado con el que todavía no ha perdido.
+
+En el caso de que gané el programa. En la siguiente ronda el programa sacará con lo que ha perdido el contrincante:
+
+Rondas posibles:
+Papel>Piedra ---> Programa sacara en la siguiente ronda Piedra
+Piedra>Tijeras ---> Programa sacara en la siguiente ronda Tijeras
+Tijeras>Papel --->  Programa sacara en la siguiente ronda Papel
+
+En el caso de ganar 2 partidas seguidas deberá sacar el resultado con el que ha ganado la partida anterior.  
+
+En caso de empate. El programa sacará un resultado random. Entre los dos resultados que quedan sin sacar.
 
 
 # Modelo del Agente
 
-![Modelo](./Modelo.png)
 
-=======
-Práctica Axentes Intelixentes
+![Alt text](image.png)
 
-Diego Pereiro Martinez Sayanes
+El modelo de este agente sería Model-Based  agent ya que el Agente Inteligente tiene un historial de las partidas que ha ido jugando y el comportamiento del robot no cambia dependiendo de la distancia que haya hasta su objetivo. El programa sigue las normas básicas del juego RPS.``
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Características del Agente
+Partially Observable / Multi Agent / Stochastic / Episodic / Static / Discrete 
 
 
 
@@ -131,5 +133,4 @@ S. McConnel. _Code Complete: A Practical Handbook of Software Construction_, 2dn
 
 Russell, Peter. _ARTIFICIAL INTELLIGENCE : A Modern Approach_, Global Edition. S.L., Pearson Education Limited, 2021.
 
-‌
->>>>>>> 1823a24958681bc050e20bdb3e2b2c586601102a
+
