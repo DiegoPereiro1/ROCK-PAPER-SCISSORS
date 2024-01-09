@@ -24,10 +24,8 @@ Victories = {
 
 
 class EstrategiaRandom:
-    def __init__(self):
-        pass
     
-    def get_computer_action(self,user_action):
+    def get_computer_action(self,_user_action):#user action tiene un barra baja delante porque me salta un warning al no usarlo en la función
         computer_selection = random.randint(0, len(GameAction) - 1)
         computer_action = GameAction(computer_selection)
         print(f"Computer picked {computer_action.name}.")    
@@ -47,29 +45,35 @@ class EstrategiaPrincipal:
             computer_action = GameAction(computer_selection)
         
        
-        elif assess_game(self.history[-1][0],self.history[-1][1])==GameAction.Defeat:#Cuando la máquina pierde en la ultima ronda
+        elif assess_game(self.history[-1][0],self.history[-1][1])==GameResult.Defeat:#Cuando la máquina pierde en la ultima ronda
             past_user_action=self.history[-1][0]
-            if len(self.history)>=2 and assess_game(self.history[-2][0],self.history[-2][1])==GameAction.Defeat:#Esto si ha perdido dos veces seguidas
+            if len(self.history)>=2 and assess_game(self.history[-2][0],self.history[-2][1])==GameResult.Defeat:#Esto si ha perdido dos veces seguidas
+                
                 lista_posibilidades=[GameAction.Rock,GameAction.Scissors,GameAction.Paper]
                 past_computer_action=self.history[-1][1]
                 past_past_computer_action=self.history[-2][1]
+                
                 if past_computer_action in lista_posibilidades:
-                    lista_posibilidades.remove(past_computer_action)
+                    lista_posibilidades.remove(past_computer_action)#Se elimina el lo que se ha utilizado en el último turno
                 if past_past_computer_action in lista_posibilidades:
-                    lista_posibilidades.remove(past_computer_action)
-                computer_selection = random.randint(0, len(GameAction) - 1)
+                    lista_posibilidades.remove(past_computer_action)#Se elimina el lo que se ha utilizado en el penúltimo turno
+                    
+                computer_selection = random.randint(0, len(lista_posibilidades) - 1)
                 computer_action = GameAction(computer_selection)        
             else:    
                 if past_user_action==GameAction.Scissors:
-                    return GameAction.Rock
+                    computer_action=GameAction.Rock
                 elif past_user_action==GameAction.Rock:
-                    return GameAction.Paper
+                    computer_action=GameAction.Paper
                 else: 
-                    return GameAction.Rock
+                    computer_action=GameAction.Rock
             
         
-        elif assess_game(self.history[-1][0],self.history[-1][1])==GameAction.Victory:
-            
+        elif assess_game(self.history[-1][0],self.history[-1][1])==GameResult.Victory:
+              
+              
+              
+        
             
         self.history.append([user_action,computer_action])
         print(f"Computer picked {computer_action.name}.") 
