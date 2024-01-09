@@ -68,13 +68,14 @@ class EstrategiaPrincipal:
                 else: 
                     computer_action=GameAction.Rock
             
-        
-        elif assess_game(self.history[-1][0],self.history[-1][1])==GameResult.Victory:
-              
-              
-              
-        
-            
+        elif assess_game(self.history[-1][0],self.history[-1][1])==GameResult.Victory: # Esoto es si ha ganado la última ronda
+            past_user_action=self.history[-1][0]
+            if len(self.history)>=2 and assess_game(self.history[-2][0],self.history[-2][1])==GameResult.Victory:#Esto si ha ganado dos veces seguidas
+                computer_action = past_user_action
+            else: # Esto es si solo ha ganado una vez
+                past_computer_action=self.history[-1][1]
+                computer_action = past_computer_action
+                
         self.history.append([user_action,computer_action])
         print(f"Computer picked {computer_action.name}.") 
         return computer_action 
@@ -155,7 +156,7 @@ def get_strategy():
 
 def main():
     strategy= get_strategy()   
-    number_games = int(input(f"How many game do you want to play?"))
+    number_games = int(input(f"How many games do you want to play?"))
     games_played = 0
     
     while number_games > games_played:
@@ -172,9 +173,7 @@ def main():
         
         games_played+=1    
         
-        if games_played==number_games:
-            
-            if play_another_round():
+        if games_played==number_games and play_another_round():
                 number_games+=1
                 
 
