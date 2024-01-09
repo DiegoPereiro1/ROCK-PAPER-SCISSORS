@@ -45,9 +45,9 @@ class EstrategiaPrincipal:
             computer_action = GameAction(computer_selection)
         
        
-        elif assess_game(self.history[-1][0],self.history[-1][1])==GameResult.Defeat:#Cuando la máquina pierde en la ultima ronda
+        elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Defeat:#Cuando la máquina pierde en la ultima ronda
             past_user_action=self.history[-1][0]
-            if len(self.history)>=2 and assess_game(self.history[-2][0],self.history[-2][1])==GameResult.Defeat:#Esto si ha perdido dos veces seguidas
+            if len(self.history)>=2 and assess_game_silent(self.history[-2][0],self.history[-2][1])==GameResult.Defeat:#Esto si ha perdido dos veces seguidas
                 
                 lista_posibilidades=[GameAction.Rock,GameAction.Scissors,GameAction.Paper]
                 past_computer_action=self.history[-1][1]
@@ -59,7 +59,8 @@ class EstrategiaPrincipal:
                     lista_posibilidades.remove(past_computer_action)#Se elimina el lo que se ha utilizado en el penúltimo turno
                     
                 computer_selection = random.randint(0, len(lista_posibilidades) - 1)
-                computer_action = GameAction(computer_selection)        
+                computer_action = GameAction(computer_selection)  
+                      
             else:#Cuando solo ha perdido una vez    
                 if past_user_action==GameAction.Scissors:
                     computer_action=GameAction.Rock
@@ -68,15 +69,15 @@ class EstrategiaPrincipal:
                 else: 
                     computer_action=GameAction.Rock
             
-        elif assess_game(self.history[-1][0],self.history[-1][1])==GameResult.Victory: # Esoto es si ha ganado la última ronda
+        elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Victory: # Esoto es si ha ganado la última ronda
             past_user_action=self.history[-1][0]
-            if len(self.history)>=2 and assess_game(self.history[-2][0],self.history[-2][1])==GameResult.Victory:#Esto si ha ganado dos veces seguidas
+            if len(self.history)>=2 and assess_game_silent(self.history[-2][0],self.history[-2][1])==GameResult.Victory:#Esto si ha ganado dos veces seguidas
                 computer_action = past_user_action
             else: # Esto es si solo ha ganado una vez
                 past_computer_action=self.history[-1][1]
                 computer_action = past_computer_action
         
-        elif assess_game(self.history[-1][0],self.history[-1][1])==GameResult.Tie: # Esto es si ha empatado la ultima ronda
+        elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Tie: # Esto es si ha empatado la ultima ronda
             lista_posibilidades=[GameAction.Rock,GameAction.Scissors,GameAction.Paper]
             past_computer_action=self.history[-1][1]
             if past_computer_action in lista_posibilidades:
@@ -87,6 +88,36 @@ class EstrategiaPrincipal:
         self.history.append([user_action,computer_action])
         print(f"Computer picked {computer_action.name}.") 
         return computer_action 
+
+def assess_game_silent(user_action, computer_action):
+
+    game_result = None
+
+    if user_action == computer_action:
+        game_result = GameResult.Tie
+
+    # You picked Rock
+    elif user_action == GameAction.Rock:
+        if computer_action == GameAction.Scissors:
+            game_result = GameResult.Victory
+        else:
+            game_result = GameResult.Defeat
+
+    # You picked Paper
+    elif user_action == GameAction.Paper:
+        if computer_action == GameAction.Rock:
+            game_result = GameResult.Victory
+        else:
+            game_result = GameResult.Defeat
+
+    # You picked Scissors
+    elif user_action == GameAction.Scissors:
+        if computer_action == GameAction.Rock:
+            game_result = GameResult.Defeat
+        else:          
+            game_result = GameResult.Victory
+
+    return game_result
 
 def assess_game(user_action, computer_action):
 
