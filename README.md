@@ -1,9 +1,9 @@
-Práctica Axentes Intelixentes
+# ROCK-PAPER-SCISSORS
+Practice 1 // AI and Big Data course-IES de Teis
 
-# Estrategia del Agente Inteligente
+Diego Pereiro Martinez Sayanes
 
-Cuando empiece la partida se pregunta y guarda cuantas partidas se van a jugar.
-
+# Estrategia del Agente
 Se guardan los movimientos tanto del usuario como de la máquina en una lista.
 
 Primer movimiento tiene que ser random
@@ -34,9 +34,10 @@ En caso de empate. El programa sacará un resultado random. Entre los dos result
 
 ![Alt text](image.png)
 
-El modelo de este agente sería Model-Based reflex agent ya que el Agente Inteligente tiene un historial de las partidas que ha ido jugando y el comportamiento del robot no cambia dependiendo de la distancia que haya hasta su objetivo. El programa sigue las normas básicas del juego RPS.``
+El modelo de este agente sería Model-Based  agent ya que el Agente Inteligente tiene un historial de las partidas que ha ido jugando y el comportamiento del robot no cambia dependiendo de la distancia que haya hasta su objetivo. El programa sigue las normas básicas del juego RPS.``
 
-
+# Características del Agente
+Partially Observable / Multi Agent / Stochastic / Episodic / Static / Discrete 
 
 
 
@@ -132,4 +133,4 @@ S. McConnel. _Code Complete: A Practical Handbook of Software Construction_, 2dn
 
 Russell, Peter. _ARTIFICIAL INTELLIGENCE : A Modern Approach_, Global Edition. S.L., Pearson Education Limited, 2021.
 
-‌
+
