@@ -67,15 +67,15 @@ class EstrategiaPrincipal:
                 elif past_user_action==GameAction.Rock:
                     computer_action=GameAction.Paper
                 else: 
-                    computer_action=GameAction.Rock
+                    computer_action=GameAction.Scissors
             
         elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Victory: # Esoto es si ha ganado la última ronda
             past_user_action=self.history[-1][0]
             if len(self.history)>=2 and assess_game_silent(self.history[-2][0],self.history[-2][1])==GameResult.Victory:#Esto si ha ganado dos veces seguidas
                 computer_action = past_user_action
             else: # Esto es si solo ha ganado una vez
-                past_computer_action=self.history[-1][1]
-                computer_action = past_computer_action
+                past_user_action=self.history[-1][0]
+                computer_action = past_user_action
         
         elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Tie: # Esto es si ha empatado la ultima ronda
             lista_posibilidades=[GameAction.Rock,GameAction.Scissors,GameAction.Paper]
