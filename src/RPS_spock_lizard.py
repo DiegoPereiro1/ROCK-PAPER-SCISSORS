@@ -27,10 +27,7 @@ Victories = {
     
     GameAction.Lizard: [GameAction.Paper,GameAction.Spock],
     
-    GameAction.Spock: [GameAction.Rock,GameAction.Scissors]
-    
-    
-    
+    GameAction.Spock: [GameAction.Rock,GameAction.Scissors]   
 }
 
 
