@@ -30,11 +30,9 @@ Victories = {
     GameAction.Spock: [GameAction.Rock,GameAction.Scissors]   
 }
 
-
-
 class EstrategiaRandom:
     
-    def get_computer_action(self,_user_action):#user action tiene un barra baja delante porque me salta un warning al no usarlo en la función
+    def get_computer_action(self,_user_action, _game):#user action tiene un barra baja delante porque me salta un warning al no usarlo en la función
         computer_selection = random.randint(0, len(GameAction) - 1)
         computer_action = GameAction(computer_selection)
         print(f"Computer picked {computer_action.name}.")    
@@ -44,16 +42,16 @@ class EstrategiaPrincipal:
     def __init__(self):
         self.history=[]
         
-    def get_computer_action(self,user_action):
+    def get_computer_action(self,user_action, game):
         computer_action=None
         
         if len(self.history)==0:#Comportamiento en la primera ronda
             computer_selection = random.randint(0, len(GameAction) - 1)
             computer_action = GameAction(computer_selection)
 
-        elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Victory:#Cuando la máquina pierde en la ultima ronda
+        elif game.assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Victory:#Cuando la máquina pierde en la ultima ronda
             past_user_action=self.history[-1][0]
-            if len(self.history)>=2 and assess_game_silent(self.history[-2][0],self.history[-2][1])==GameResult.Victory:#Esto si ha perdido dos veces seguidas
+            if len(self.history)>=2 and game.assess_game_silent(self.history[-2][0],self.history[-2][1])==GameResult.Victory:#Esto si ha perdido dos veces seguidas
                 
                 lista_posibilidades=list(Victories.keys()) # TODO: Que la lista de posibilidades se genere de forma dinamica utilizando las claves de Victories
                 
@@ -63,7 +61,7 @@ class EstrategiaPrincipal:
                 if past_computer_action in lista_posibilidades:
                     lista_posibilidades.remove(past_computer_action)#Se elimina el lo que se ha utilizado en el último turno
                 if past_past_computer_action in lista_posibilidades:
-                    lista_posibilidades.remove(past_computer_action)#Se elimina el lo que se ha utilizado en el penúltimo turno
+                    lista_posibilidades.remove(past_past_computer_action)#Se elimina el lo que se ha utilizado en el penúltimo turno
                     
                 computer_selection = random.randint(0, len(lista_posibilidades) - 1)
                 computer_action = lista_posibilidades[computer_selection]
@@ -80,15 +78,15 @@ class EstrategiaPrincipal:
                 computer_selection = random.randint(0, len(lista_acciones) - 1)    
                 computer_action = lista_acciones[computer_selection]        
             
-        elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Defeat: # Esoto es si ha ganado la última ronda
+        elif game.assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Defeat: # Esoto es si ha ganado la última ronda
             past_user_action=self.history[-1][0]
-            if len(self.history)>=2 and assess_game_silent(self.history[-2][0],self.history[-2][1])==GameResult.Defeat:#Esto si ha ganado dos veces seguidas
+            if len(self.history)>=2 and game.assess_game_silent(self.history[-2][0],self.history[-2][1])==GameResult.Defeat:#Esto si ha ganado dos veces seguidas
                 past_computer_action=self.history[-1][1]
                 computer_action = past_computer_action
             else: # Esto es si solo ha ganado una vez
                 computer_action = past_user_action
         
-        elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Tie: # Esto es si ha empatado la ultima ronda
+        elif game.assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Tie: # Esto es si ha empatado la ultima ronda
             lista_posibilidades=list(Victories.keys())
             past_computer_action=self.history[-1][1]
             if past_computer_action in lista_posibilidades:
@@ -99,42 +97,49 @@ class EstrategiaPrincipal:
         self.history.append([user_action,computer_action])
         print(f"Computer picked {computer_action.name}.") 
         return computer_action 
+class Game:
+    
+    def __init__(self,strategy=EstrategiaPrincipal()):
+        self.strategy=strategy
+        
+    def get_computer_action(self,user_action):
+        computer_action=self.strategy.get_computer_action(user_action,self)
+        return computer_action
+    
+    def assess_game_silent(self, user_action, computer_action):
+        # Esta función indica si gana el usuario o no 
+        game_result = None
 
-def assess_game_silent(user_action, computer_action):
-    # Esta función indica si gana el agente o no 
-    game_result = None
+        if user_action == computer_action:
+            game_result = GameResult.Tie
 
-    if user_action == computer_action:
-        game_result = GameResult.Tie
+        elif user_action in (Victories[computer_action]):
+            game_result = GameResult.Defeat
 
-    elif user_action in (Victories[computer_action]):
-        game_result = GameResult.Defeat
+        else:          
+            game_result = GameResult.Victory
 
-    else:          
-        game_result = GameResult.Victory
+        return game_result
 
-    return game_result
+    def assess_game(self, user_action, computer_action):
 
-def assess_game(user_action, computer_action):
+        game_result = None
 
-    game_result = None
+        if user_action == computer_action:
+            game_result = GameResult.Tie
+            print(f"User and computer picked {user_action.name}. Draw game!")    
 
-    if user_action == computer_action:
-        game_result = GameResult.Tie
-        print(f"User and computer picked {user_action.name}. Draw game!")    
+        elif user_action in (Victories[computer_action]):
+            game_result = GameResult.Defeat
+            print(f"{computer_action.name} beats {user_action.name}  you lost the game!")
+    
+        else:          
+            game_result = GameResult.Victory
+            print(f"{user_action.name} beats {computer_action.name}  you won the game!")
 
-    elif user_action in (Victories[computer_action]):
-        game_result = GameResult.Defeat
-        print(f"{computer_action.name} beats {user_action.name}  you lost the game!")
-   
-    else:          
-        game_result = GameResult.Victory
-        print(f"{user_action.name} beats {computer_action.name}  you won the game!")
-
-    return game_result
-
-   
-
+        return game_result   
+        
+        
 def get_computer_action():
     computer_selection = random.randint(0, len(GameAction) - 1)
     computer_action = GameAction(computer_selection)
@@ -195,7 +200,8 @@ def get_game_count():
     return number_games
 
 def main():
-    strategy= get_strategy()   
+    strategy= get_strategy()
+    game=Game(strategy)  
     number_games = get_game_count()
     games_played = 0
     
@@ -208,8 +214,8 @@ def main():
             print(f"Invalid selection. Pick a choice in range {range_str}!")
             continue
         
-        computer_action = strategy.get_computer_action(user_action)       
-        assess_game(user_action, computer_action)
+        computer_action = game.get_computer_action(user_action)       
+        game.assess_game(user_action, computer_action)
         
         games_played+=1    
         
