@@ -171,31 +171,54 @@ def get_user_action():
     game_choices_str = ", ".join(game_choices)
     user_selection = int(input(f"\nPick a choice ({game_choices_str}): "))
     user_action = GameAction(user_selection)
-    
-    
-    
+     
     return user_action
 
 
 def play_another_round():
-    another_round = input("\nAnother round? (y/n): ")
+    while True:
+        try:
+            another_round = input("\nAnother round? (y/n): ")
+            if another_round.lower() not in ['y', 'n']:
+                raise ValueError
+            break
+        except ValueError:
+            print(f"Invalid selection. Pick either y or n!")
+            continue
+        
     return another_round.lower() == 'y'
 
 def get_strategy():
     strategy=EstrategiaRandom() #Esta sería la estrategia por defecto
-    
-    dificulty_selection = int(input(f"\Pick a mode Easy(1) or Hard(2)"))
-    
+    while True:
+        try:
+            dificulty_selection = int(input(f"\Pick a mode Easy(1) or Hard(2)"))
+            if dificulty_selection not in [1, 2]:
+                raise ValueError
+            break
+        except ValueError:
+            print(f"Invalid selection. Pick a choice in range [1, 2]!")
+            continue
     if dificulty_selection==1:
         strategy=EstrategiaRandom()
     elif dificulty_selection==2:
         strategy=EstrategiaPrincipal()
+        
     return strategy
 
+def get_game_count():
+    while True:
+        try:
+            number_games = int(input(f"How many games do you want to play?"))
+            break
+        except ValueError:
+            print(f"Invalid selection. Pick an integer number!")
+            continue
+    return number_games
 
 def main():
     strategy= get_strategy()   
-    number_games = int(input(f"How many games do you want to play?"))
+    number_games = get_game_count()
     games_played = 0
     
     while number_games > games_played:
