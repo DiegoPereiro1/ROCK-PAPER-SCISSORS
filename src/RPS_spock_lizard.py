@@ -51,9 +51,9 @@ class EstrategiaPrincipal:
             computer_selection = random.randint(0, len(GameAction) - 1)
             computer_action = GameAction(computer_selection)
 
-        elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Defeat:#Cuando la máquina pierde en la ultima ronda
+        elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Victory:#Cuando la máquina pierde en la ultima ronda
             past_user_action=self.history[-1][0]
-            if len(self.history)>=2 and assess_game_silent(self.history[-2][0],self.history[-2][1])==GameResult.Defeat:#Esto si ha perdido dos veces seguidas
+            if len(self.history)>=2 and assess_game_silent(self.history[-2][0],self.history[-2][1])==GameResult.Victory:#Esto si ha perdido dos veces seguidas
                 
                 lista_posibilidades=list(Victories.keys()) # TODO: Que la lista de posibilidades se genere de forma dinamica utilizando las claves de Victories
                 
@@ -69,7 +69,6 @@ class EstrategiaPrincipal:
                 computer_action = lista_posibilidades[computer_selection]
                       
             else:#Cuando solo ha perdido una vez    
-                user_action in (Victories[computer_action])
                 lista_acciones=list(Victories.keys())
                 lista_acciones_derrota=Victories[past_user_action]
                 for accion in lista_acciones_derrota:
@@ -81,9 +80,9 @@ class EstrategiaPrincipal:
                 computer_selection = random.randint(0, len(lista_acciones) - 1)    
                 computer_action = lista_acciones[computer_selection]        
             
-        elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Victory: # Esoto es si ha ganado la última ronda
+        elif assess_game_silent(self.history[-1][0],self.history[-1][1])==GameResult.Defeat: # Esoto es si ha ganado la última ronda
             past_user_action=self.history[-1][0]
-            if len(self.history)>=2 and assess_game_silent(self.history[-2][0],self.history[-2][1])==GameResult.Victory:#Esto si ha ganado dos veces seguidas
+            if len(self.history)>=2 and assess_game_silent(self.history[-2][0],self.history[-2][1])==GameResult.Defeat:#Esto si ha ganado dos veces seguidas
                 past_computer_action=self.history[-1][1]
                 computer_action = past_computer_action
             else: # Esto es si solo ha ganado una vez
@@ -109,10 +108,10 @@ def assess_game_silent(user_action, computer_action):
         game_result = GameResult.Tie
 
     elif user_action in (Victories[computer_action]):
-        game_result = GameResult.Victory
+        game_result = GameResult.Defeat
 
     else:          
-        game_result = GameResult.Defeat
+        game_result = GameResult.Victory
 
     return game_result
 
@@ -125,12 +124,12 @@ def assess_game(user_action, computer_action):
         print(f"User and computer picked {user_action.name}. Draw game!")    
 
     elif user_action in (Victories[computer_action]):
-        game_result = GameResult.Victory
-        print(f"{computer_action.name} beats {user_action.name}  you won game!")
+        game_result = GameResult.Defeat
+        print(f"{computer_action.name} beats {user_action.name}  you lost the game!")
    
     else:          
-        game_result = GameResult.Defeat
-        print(f"{user_action.name} beats {computer_action.name}  you lost game!")
+        game_result = GameResult.Victory
+        print(f"{user_action.name} beats {computer_action.name}  you won the game!")
 
     return game_result
 
@@ -150,29 +149,54 @@ def get_user_action():
     game_choices_str = ", ".join(game_choices)
     user_selection = int(input(f"\nPick a choice ({game_choices_str}): "))
     user_action = GameAction(user_selection)
+    print(f"User picked {user_action.name}.")
     
     return user_action
 
 
 def play_another_round():
-    another_round = input("\nAnother round? (y/n): ")
+    while True:
+        try:
+            another_round = input("\nAnother round? (y/n): ")
+            if another_round.lower() not in ['y', 'n']:
+                raise ValueError
+            break
+        except ValueError:
+            print(f"Invalid selection. Pick either y or n!")
+            continue
     return another_round.lower() == 'y'
 
 def get_strategy():
     strategy=EstrategiaRandom() #Esta sería la estrategia por defecto
-    
-    dificulty_selection = int(input(f"\Pick a mode Easy(1) or Hard(2)"))
-    
+    while True:
+        try:
+            dificulty_selection = int(input(f"\Pick a mode Easy(1) or Hard(2)"))
+            if dificulty_selection not in [1, 2]:
+                raise ValueError
+            break
+        except ValueError:
+            print(f"Invalid selection. Pick a choice in range [1, 2]!")
+            continue
+
     if dificulty_selection==1:
         strategy=EstrategiaRandom()
     elif dificulty_selection==2:
         strategy=EstrategiaPrincipal()
     return strategy
 
+def get_game_count():
+    while True:
+        try:
+            number_games = int(input(f"How many games do you want to play?"))
+            break
+        except ValueError:
+            print(f"Invalid selection. Pick an integer number!")
+            continue
+    return number_games
 
 def main():
     strategy= get_strategy()   
-    number_games = int(input(f"How many games do you want to play?"))
+    number_games = get_game_count()
     games_played = 0
     
     while number_games > games_played:
